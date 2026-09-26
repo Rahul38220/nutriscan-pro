@@ -1,22 +1,34 @@
-"""
-NutriScan Pro - Random Forest Crop & Fertilizer Recommender
-Prototyping machine learning recommender layer using Scikit-Learn.
-"""
-
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, classification_report
 
-def train_model():
-    print("Initializing NutriScan Pro Recommender Training Pipeline...")
+def train_crop_recommender():
+    print("🌿 Loading Soil & Crop Dataset...")
+    df = pd.read_csv("ml-model/Crop_recommendation.csv")
     
-    # Initialize Random Forest Classifier
-    rf_model = RandomForestClassifier(n_estimators=100, random_state=42)
-    print("Random Forest Classifier initialized with 100 estimators.")
+    # Features (Inputs) & Target (Output Crop)
+    X = df[['N', 'P', 'K', 'temperature', 'humidity', 'ph', 'rainfall']]
+    y = df['label']
     
-    # Post-Exam Milestones:
-    # 1. Fit model on Kaggle Agricultural dataset
-    # 2. Export parameters for ESP32 TinyML deployment
+    # Train-Test Split (80% training, 20% testing)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    
+    print("🌲 Training Random Forest Classifier (100 Decision Trees)...")
+    model = RandomForestClassifier(n_estimators=100, random_state=42)
+    model.fit(X_train, y_train)
+    
+    # Evaluate
+    y_pred = model.predict(X_test)
+    acc = accuracy_score(y_test, y_pred)
+    
+    print(f"✅ Model Training Complete! Accuracy: {acc * 100:.2f}%\n")
+    
+    # Test a sample prediction with named columns to avoid warnings
+    sample_soil = pd.DataFrame([[90, 42, 43, 20.8, 82.0, 6.5, 202.9]], 
+                               columns=['N', 'P', 'K', 'temperature', 'humidity', 'ph', 'rainfall'])
+    prediction = model.predict(sample_soil)
+    print(f"🔮 Sample Soil Reading Prediction: Recommended Crop -> '{prediction[0].upper()}'")
 
 if __name__ == "__main__":
-    train_model()
+    train_crop_recommender()
