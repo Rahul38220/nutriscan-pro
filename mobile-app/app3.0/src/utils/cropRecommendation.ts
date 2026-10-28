@@ -187,3 +187,36 @@ export function getpHStatus(pH: number): string {
   if (pH > max) return 'high';
   return 'optimal';
 }
+
+export async function fetchMLCropRecommendation(
+  sensorData: SensorData, 
+  temp = 25, 
+  humidity = 75, 
+  rainfall = 150
+): Promise<string | null> {
+  try {
+    const response = await fetch('http://localhost:8000/predict', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        N: sensorData.nitrogen,
+        P: sensorData.phosphorus,
+        K: sensorData.potassium,
+        temperature: temp,
+        humidity: humidity,
+        ph: sensorData.pH,
+        rainfall: rainfall
+      })
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Server responded with status ${response.status}`);
+    }
+
+    const result = await response.json();
+    return result.recommended_crop;
+  } catch (err) {
+    console.warn("⚠️ ML API offline or unreachable, falling back to rules:", err);
+    return null;
+  }
+}
