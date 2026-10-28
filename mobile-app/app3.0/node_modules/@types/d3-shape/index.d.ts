@@ -317,6 +317,20 @@ export interface Arc<This, Datum> {
      * If context is not specified, returns the current context, which defaults to null.
      */
     context(context: CanvasRenderingContext2D | null): this;
+
+    /**
+     * Returns the maximum number of digits after the decimal separator, which defaults to 3.
+     */
+    digits(): number | null;
+    /**
+     * Sets the maximum number of digits after the decimal separator and returns this arc generator.
+     *
+     * This option only applies when the associated context is null, as when this arc generator is used
+     * to produce path data.
+     *
+     * @param digits The maximum number of digits after the decimal separator, or null for full precision.
+     */
+    digits(digits: number | null): this;
 }
 
 /**
@@ -750,6 +764,20 @@ export interface Line<Datum> {
      * Sets the context and returns this line generator.
      */
     context(context: CanvasRenderingContext2D | null): this;
+
+    /**
+     * Returns the maximum number of digits after the decimal separator, which defaults to 3.
+     */
+    digits(): number | null;
+    /**
+     * Sets the maximum number of digits after the decimal separator and returns this line generator.
+     *
+     * This option only applies when the associated context is null, as when this line generator is used
+     * to produce path data.
+     *
+     * @param digits The maximum number of digits after the decimal separator, or null for full precision.
+     */
+    digits(digits: number | null): this;
 }
 
 /**
@@ -915,6 +943,20 @@ export interface LineRadial<Datum> {
      * Equivalent to line.context.
      */
     context(context: CanvasRenderingContext2D | null): this;
+
+    /**
+     * Returns the maximum number of digits after the decimal separator, which defaults to 3.
+     */
+    digits(): number | null;
+    /**
+     * Sets the maximum number of digits after the decimal separator and returns this radial line generator.
+     *
+     * This option only applies when the associated context is null, as when this radial line generator is used
+     * to produce path data.
+     *
+     * @param digits The maximum number of digits after the decimal separator, or null for full precision.
+     */
+    digits(digits: number | null): this;
 }
 
 /**
@@ -1182,6 +1224,20 @@ export interface Area<Datum> {
      * Sets the context and returns this area generator.
      */
     context(context: CanvasRenderingContext2D | null): this;
+
+    /**
+     * Returns the maximum number of digits after the decimal separator, which defaults to 3.
+     */
+    digits(): number | null;
+    /**
+     * Sets the maximum number of digits after the decimal separator and returns this area generator.
+     *
+     * This option only applies when the associated context is null, as when this area generator is used
+     * to produce path data.
+     *
+     * @param digits The maximum number of digits after the decimal separator, or null for full precision.
+     */
+    digits(digits: number | null): this;
 
     /**
      * Returns a new line generator that has this area generator’s current defined accessor, curve and context.
@@ -1457,6 +1513,20 @@ export interface AreaRadial<Datum> {
      * Equivalent to line.context.
      */
     context(context: CanvasRenderingContext2D | null): this;
+
+    /**
+     * Returns the maximum number of digits after the decimal separator, which defaults to 3.
+     */
+    digits(): number | null;
+    /**
+     * Sets the maximum number of digits after the decimal separator and returns this radial area generator.
+     *
+     * This option only applies when the associated context is null, as when this radial area generator is used
+     * to produce path data.
+     *
+     * @param digits The maximum number of digits after the decimal separator, or null for full precision.
+     */
+    digits(digits: number | null): this;
 
     /**
      * Returns a new radial line generator that has this radial area generator’s current defined accessor, curve and context.
@@ -1931,6 +2001,20 @@ export interface Link<This, LinkDatum, NodeDatum> {
      * Sets the context and returns this link generator.
      */
     context(context: CanvasRenderingContext2D | null): this;
+
+    /**
+     * Returns the maximum number of digits after the decimal separator, which defaults to 3.
+     */
+    digits(): number | null;
+    /**
+     * Sets the maximum number of digits after the decimal separator and returns this link generator.
+     *
+     * This option only applies when the associated context is null, as when this link generator is used
+     * to produce path data.
+     *
+     * @param digits The maximum number of digits after the decimal separator, or null for full precision.
+     */
+    digits(digits: number | null): this;
 }
 
 /**
@@ -2129,6 +2213,20 @@ export interface LinkRadial<This, LinkDatum, NodeDatum> {
      * Sets the context and returns this link generator.
      */
     context(context: CanvasRenderingContext2D | null): this;
+
+    /**
+     * Returns the maximum number of digits after the decimal separator, which defaults to 3.
+     */
+    digits(): number | null;
+    /**
+     * Sets the maximum number of digits after the decimal separator and returns this radial link generator.
+     *
+     * This option only applies when the associated context is null, as when this radial link generator is used
+     * to produce path data.
+     *
+     * @param digits The maximum number of digits after the decimal separator, or null for full precision.
+     */
+    digits(digits: number | null): this;
 }
 
 /**
@@ -2280,6 +2378,20 @@ export interface Symbol<This, Datum> {
      * Sets the context and returns this symbol generator.
      */
     context(context: CanvasRenderingContext2D | null): this;
+
+    /**
+     * Returns the maximum number of digits after the decimal separator, which defaults to 3.
+     */
+    digits(): number | null;
+    /**
+     * Sets the maximum number of digits after the decimal separator and returns this symbol generator.
+     *
+     * This option only applies when the associated context is null, as when this symbol generator is used
+     * to produce path data.
+     *
+     * @param digits The maximum number of digits after the decimal separator, or null for full precision.
+     */
+    digits(digits: number | null): this;
 }
 
 /**
@@ -2539,7 +2651,7 @@ export interface Stack<This, Datum, Key> {
     /**
      * Returns the current offset accessor, which defaults to stackOffsetNone; this uses a zero baseline.
      */
-    offset(): (series: Series<Datum, Key>, order: number[]) => void;
+    offset(): (series: Series<Datum, Key>[], order: number[]) => void;
     /**
      * Reset the offset to use stackOffsetNone; this uses a zero baseline.
      *
@@ -2552,7 +2664,7 @@ export interface Stack<This, Datum, Key> {
      * @param offset A function which is passed the generated series array and the order index array;
      *               it is then responsible for updating the lower and upper values in the series array.
      */
-    offset(offset: (series: Series<Datum, Key>, order: number[]) => void): this;
+    offset(offset: (series: Series<Datum, Key>[], order: number[]) => void): this;
 }
 
 /**
@@ -2641,40 +2753,40 @@ export function stackOrderReverse(series: Series<any, any>): number[];
 /**
  * Applies a zero baseline and normalizes the values for each point such that the topline is always one.
  *
- * @param series A series generated by a stack generator.
+ * @param series A series array generated by a stack generator.
  * @param order An array of numeric indexes representing the stack order.
  */
-export function stackOffsetExpand(series: Series<any, any>, order: Iterable<number>): void;
+export function stackOffsetExpand(series: Series<any, any>[], order: Iterable<number>): void;
 
 /**
  * Positive values are stacked above zero, while negative values are stacked below zero.
  *
- * @param series A series generated by a stack generator.
+ * @param series A series array generated by a stack generator.
  * @param order An array of numeric indexes representing the stack order.
  */
-export function stackOffsetDiverging(series: Series<any, any>, order: Iterable<number>): void;
+export function stackOffsetDiverging(series: Series<any, any>[], order: Iterable<number>): void;
 
 /**
  * Applies a zero baseline.
  *
- * @param series A series generated by a stack generator.
+ * @param series A series array generated by a stack generator.
  * @param order An array of numeric indexes representing the stack order.
  */
-export function stackOffsetNone(series: Series<any, any>, order: Iterable<number>): void;
+export function stackOffsetNone(series: Series<any, any>[], order: Iterable<number>): void;
 
 /**
  * Shifts the baseline down such that the center of the streamgraph is always at zero.
  *
- * @param series A series generated by a stack generator.
+ * @param series A series array generated by a stack generator.
  * @param order An array of numeric indexes representing the stack order.
  */
-export function stackOffsetSilhouette(series: Series<any, any>, order: Iterable<number>): void;
+export function stackOffsetSilhouette(series: Series<any, any>[], order: Iterable<number>): void;
 
 /**
  * Shifts the baseline so as to minimize the weighted wiggle of layers. This offset is recommended for streamgraphs in conjunction with the inside-out order.
  * See Stacked Graphs—Geometry & Aesthetics by Bryon & Wattenberg for more information.
  *
- * @param series A series generated by a stack generator.
+ * @param series A series array generated by a stack generator.
  * @param order An array of numeric indexes representing the stack order.
  */
-export function stackOffsetWiggle(series: Series<any, any>, order: Iterable<number>): void;
+export function stackOffsetWiggle(series: Series<any, any>[], order: Iterable<number>): void;
